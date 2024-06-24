@@ -36,6 +36,7 @@ The project includes the following components:
     - This will build the AtomicFootball directory from the repository.
     - You can specify the directory location in the text box. The default location is `C:\`.
     - Click the **Setup AtomicFootball** button to download and extract the AtomicFootball repository into the specified directory.
+    - The Exclusion Helper script will run automatically to provide insights into where you will need to add exclssuions for the atomics. I recommend creating the directory you intend to exclude in your AV and adding the exclusion before installing the atomics.
 
 #### Install Invoke-AtomicRedTeam Framework
 1. **Configure Atomic Red Team Installation Options and Arguments**
