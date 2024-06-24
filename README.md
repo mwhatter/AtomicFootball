@@ -119,7 +119,7 @@ To configure evasion techniques:
 ```
 ![Evasion Configuration](png/evasion_configuration.png)
 
-### Running the Campaign Runner Script(Standalone campaings)
+### Running the Campaign Runner Script(Standalone Campaings)
 
 This script provides a GUI for running multiple AtomicRedTeam tests in sequence with extensive logging and state persistence.
 
