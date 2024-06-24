@@ -36,7 +36,7 @@ The project includes the following components:
     - This will build the AtomicFootball directory from the repository.
     - You can specify the directory location in the text box. The default location is `C:\`.
     - Click the **Setup AtomicFootball** button to download and extract the AtomicFootball repository into the specified directory.
-    - The Exclusion Helper script will run automatically to provide insights into where you will need to add exclssuions for the atomics. I recommend creating the directory you intend to exclude in your AV and adding the exclusion before installing the atomics.
+    - The Exclusion Helper script will run automatically to provide insights into where you will need to add exclusions for the atomics. I recommend creating the directory you intend to exclude in your AV and adding the exclusion before installing the atomics.
 
 #### Install Invoke-AtomicRedTeam Framework
 1. **Configure Atomic Red Team Installation Options and Arguments**
@@ -58,7 +58,7 @@ The project includes the following components:
 #### Setup Procmon
 1. **Setup Procmon**
     - This will configure Procmon (Process Monitor) and direct the output to the AtomicFootball directory.
-    - Click the **Setup Procmon** button to download and extract Process Monitor, which is launched to ensure you have accepted the eula before attempting your first test. You should exit Procmon before proceeding.
+    - Click the **Setup Procmon** button to download and extract Process Monitor, which is launched to ensure you have accepted the EULA before attempting your first test. You should exit Procmon before proceeding.
 
 #### Reference
 - **Invoke-AtomicRedTeam Wiki**
@@ -133,11 +133,28 @@ To run the campaign builder script:
 ```
 ![Campaign Builder](png/campaignbuilder.png)
 
-### Viewing and Managing the Campaign CSV
+### Configuring Evasion Techniques
 
-The `View Campaign` button in the `AtomicCampaignBuilder.ps1` script opens a new maximized window that displays the current campaign CSV. Users can delete selected rows from the CSV:
+The `Configure Evasion` button in the `AtomicSniper.ps1` script opens a new popup window that allows users to select and configure evasion techniques to run before the main test. This popup includes:
 
-- **Delete Selected Rows Button:** Deletes the selected rows from the current campaign CSV and updates the file.
+- **Filters:** ComboBoxes for filtering techniques by Tactic and Technique, and a TextBox for keyword filtering.
+- **Technique List:** Displays the list of techniques based on the selected filters, each with a checkbox for selection.
+- **Save Evasion Techniques Button:** Saves the selected techniques to a new evasion CSV, overwriting any existing file.
+- **Update Evasion Techniques Button:** Updates the existing evasion CSV with the selected techniques.
+- **View Evasion CSV Button:** Opens a new window to view and manage the evasion CSV, including deleting selected rows.
+
+To configure evasion techniques:
+
+```powershell
+.\AtomicSniper.ps1
+```
+![Evasion Configuration](png/evasion_configuration.png)
+
+### Viewing and Managing the Evasion CSV
+
+The `View Evasion CSV` button in the evasion configuration popup opens a new window that displays the current evasion CSV. Users can delete selected rows from the CSV:
+
+- **Delete Selected Rows Button:** Deletes the selected rows from the current evasion CSV and updates the file.
 
 ![Viewer](png/viewer.png)
 
