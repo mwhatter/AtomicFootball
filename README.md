@@ -102,7 +102,24 @@ To run the execution script:
 
 Snipe like a pro: load your atomic campaign csv in place of the full index to retest a curated list from your campaign.
 
-### Running the Campaign Runner Script
+### Configuring Evasion Techniques
+
+The `Configure Evasion` button in the `AtomicSniper.ps1` script opens a new popup window that allows users to select and configure evasion techniques to run before the main test. This popup includes:
+
+- **Filters:** ComboBoxes for filtering techniques by Tactic and Technique, and a TextBox for keyword filtering.
+- **Technique List:** Displays the list of techniques based on the selected filters, each with a checkbox for selection.
+- **Save Evasion Techniques Button:** Saves the selected techniques to a new evasion CSV, overwriting any existing file.
+- **Update Evasion Techniques Button:** Updates the existing evasion CSV with the selected techniques.
+- **View Evasion CSV Button:** Opens a new window to view and manage the evasion CSV, including deleting selected rows.
+
+To configure evasion techniques:
+
+```powershell
+.\AtomicSniper.ps1
+```
+![Evasion Configuration](png/evasion_configuration.png)
+
+### Running the Campaign Runner Script(Standalone campaings)
 
 This script provides a GUI for running multiple AtomicRedTeam tests in sequence with extensive logging and state persistence.
 
@@ -133,24 +150,8 @@ To run the campaign builder script:
 ```
 ![Campaign Builder](png/campaignbuilder.png)
 
-### Configuring Evasion Techniques
 
-The `Configure Evasion` button in the `AtomicSniper.ps1` script opens a new popup window that allows users to select and configure evasion techniques to run before the main test. This popup includes:
-
-- **Filters:** ComboBoxes for filtering techniques by Tactic and Technique, and a TextBox for keyword filtering.
-- **Technique List:** Displays the list of techniques based on the selected filters, each with a checkbox for selection.
-- **Save Evasion Techniques Button:** Saves the selected techniques to a new evasion CSV, overwriting any existing file.
-- **Update Evasion Techniques Button:** Updates the existing evasion CSV with the selected techniques.
-- **View Evasion CSV Button:** Opens a new window to view and manage the evasion CSV, including deleting selected rows.
-
-To configure evasion techniques:
-
-```powershell
-.\AtomicSniper.ps1
-```
-![Evasion Configuration](png/evasion_configuration.png)
-
-### Viewing and Managing the Evasion CSV
+### Viewing and Managing the Campaign CSV
 
 The `View Evasion CSV` button in the evasion configuration popup opens a new window that displays the current evasion CSV. Users can delete selected rows from the CSV:
 
