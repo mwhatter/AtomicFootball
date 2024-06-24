@@ -1,6 +1,6 @@
 # AtomicFootball
 
-This project provides a set of PowerShell scripts for executing AtomicRedTeam tests, managing exclusions in various security products, and handling setup and dependencies for smooth execution.
+This project provides a set of PowerShell scripts for executing Atomic Red Team tests, managing exclusions in various security products, and handling setup and dependencies for smooth execution.
 
 ## Overview
 
