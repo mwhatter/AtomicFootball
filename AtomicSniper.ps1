@@ -122,7 +122,8 @@ function Start-ProcMon {
         Terminate_ProcMon -procmonPath $procmonPath
     }
 
-    Start-Process -FilePath $procmonPath -ArgumentList "/Minimized"
+    $logFilePath = ".\procmonLog.pml" # Define the log file path in the current directory
+    Start-Process -FilePath $procmonPath -ArgumentList "/Minimized /Backingfile $logFilePath"
 }
 
 # Function to terminate ProcMon gracefully
