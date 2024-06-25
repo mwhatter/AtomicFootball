@@ -297,25 +297,34 @@ $btnSetupProcmon = Add-Button $stackPanel "Setup Procmon"
 $btnSetupAtomicFootballRepo.Add_Click({
     function Setup-AtomicFootballRepo {
         $atomicFootballDir = $txtAtomicFootballDir.Text
-        if (-not (Test-Path -Path $atomicFootballDir)) {
-            New-Item -ItemType Directory -Path $atomicFootballDir
+        $atomicFootballRepoName = "AtomicFootball"
+        $finalAtomicFootballDir = if ($atomicFootballDir -match "$atomicFootballRepoName$") {
+            $atomicFootballDir
+        } else {
+            Join-Path -Path $atomicFootballDir -ChildPath $atomicFootballRepoName
         }
+
+        if (-not (Test-Path -Path $finalAtomicFootballDir)) {
+            New-Item -ItemType Directory -Path $finalAtomicFootballDir -Force
+        }
+
         $atomicFootballZipUrl = "https://github.com/mwhatter/AtomicFootball/archive/refs/heads/main.zip"
-        $atomicFootballZipPath = Join-Path -Path $atomicFootballDir -ChildPath "AtomicFootball.zip"
-        $atomicFootballExtractedPath = Join-Path -Path $atomicFootballDir -ChildPath "AtomicFootball-main"
+        $atomicFootballZipPath = Join-Path -Path $finalAtomicFootballDir -ChildPath "AtomicFootball.zip"
+        $atomicFootballExtractedPath = Join-Path -Path $finalAtomicFootballDir -ChildPath "AtomicFootball-main"
 
         # Download the AtomicFootball repository
         Invoke-WebRequest -Uri $atomicFootballZipUrl -OutFile $atomicFootballZipPath
 
         # Extract the AtomicFootball repository
         Add-Type -AssemblyName System.IO.Compression.FileSystem
-        [System.IO.Compression.ZipFile]::ExtractToDirectory($atomicFootballZipPath, $atomicFootballDir)
+        [System.IO.Compression.ZipFile]::ExtractToDirectory($atomicFootballZipPath, $finalAtomicFootballDir)
 
-        # Rename the extracted directory to remove the "-main" suffix
-        if (Test-Path -Path (Join-Path -Path $atomicFootballDir -ChildPath "AtomicFootball")) {
-            Remove-Item -Path (Join-Path -Path $atomicFootballDir -ChildPath "AtomicFootball") -Force -Recurse
+        # Move the extracted files to the final directory if needed
+        $extractedDir = Join-Path -Path $finalAtomicFootballDir -ChildPath "AtomicFootball-main"
+        if (Test-Path -Path $extractedDir) {
+            Move-Item -Path (Join-Path -Path $finalAtomicFootballDir -ChildPath "AtomicFootball-main\*") -Destination $finalAtomicFootballDir -Force
+            Remove-Item -Path $extractedDir -Force -Recurse
         }
-        Rename-Item -Path $atomicFootballExtractedPath -NewName "AtomicFootball"
 
         # Remove the downloaded ZIP file
         Remove-Item -Path $atomicFootballZipPath -Force
@@ -361,11 +370,23 @@ $btnInstallAtomics.Add_Click({
 
 $btnSetupProcmon.Add_Click({
     function Setup-Procmon {
-        # Search for the AtomicFootball directory
-        $searchDir = Get-ChildItem -Path 'C:\' -Filter 'AtomicFootball' -Recurse -Directory -ErrorAction SilentlyContinue | Select-Object -First 1
-        if ($searchDir) {
-            $atomicFootballDir = $searchDir.FullName
-        } else {
+        # Search for the AtomicFootball directory, preferring C: drive
+        $drives = Get-PSDrive -PSProvider FileSystem
+        $preferredDrive = $drives | Where-Object { $_.Name -eq 'C' }
+        $otherDrives = $drives | Where-Object { $_.Name -ne 'C' }
+
+        $dirsToSearch = @($preferredDrive) + $otherDrives
+        $atomicFootballDir = $null
+
+        foreach ($drive in $dirsToSearch) {
+            $searchDir = Get-ChildItem -Path "$($drive.Root)" -Filter 'AtomicFootball' -Recurse -Directory -ErrorAction SilentlyContinue | Select-Object -First 1
+            if ($searchDir) {
+                $atomicFootballDir = $searchDir.FullName
+                break
+            }
+        }
+
+        if (-not $atomicFootballDir) {
             $atomicFootballDir = $txtAtomicFootballDir.Text
         }
 
