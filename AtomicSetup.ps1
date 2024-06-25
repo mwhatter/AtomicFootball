@@ -361,7 +361,14 @@ $btnInstallAtomics.Add_Click({
 
 $btnSetupProcmon.Add_Click({
     function Setup-Procmon {
-        $atomicFootballDir = $txtAtomicFootballDir.Text
+        # Search for the AtomicFootball directory
+        $searchDir = Get-ChildItem -Path 'C:\' -Filter 'AtomicFootball' -Recurse -Directory -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($searchDir) {
+            $atomicFootballDir = $searchDir.FullName
+        } else {
+            $atomicFootballDir = $txtAtomicFootballDir.Text
+        }
+
         $procmonZipUrl = "https://download.sysinternals.com/files/ProcessMonitor.zip"
         $procmonZipPath = Join-Path -Path $atomicFootballDir -ChildPath "ProcessMonitor.zip"
 
@@ -382,7 +389,6 @@ $btnSetupProcmon.Add_Click({
     }
     Setup-Procmon
 })
-
 
 # Show the window
 $window.ShowDialog() | Out-Null
