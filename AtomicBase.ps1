@@ -8,7 +8,7 @@ function Log_Message {
     )
     $timestamp = (Get-Date).ToString('yyyy-MM-dd HH:mm:ss')
     $logEntry = "$timestamp [$type] - $message"
-    Add-Content -Path "$env:APPDATA\MainInterfaceLog.txt" -Value $logEntry
+    Add-Content -Path ".\MainInterfaceLog.txt" -Value $logEntry
     Write-Host $logEntry
 }
 
