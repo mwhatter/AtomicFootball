@@ -252,11 +252,32 @@ function Create-Or-Enable-ScheduledTask {
     }
 }
 
+# Function to run cleanup commands for each test
+function Run-Cleanup {
+    Log-Message "Running cleanup for all tests"
+
+    for ($i = 0; $i -lt $global:deduplicatedContent.Count; $i++) {
+        $test = $global:deduplicatedContent[$i]
+        Log-Message "Running cleanup for TechniqueID=$($test."Technique #") and TestNumber=$($test."Test #")"
+
+        $command = "Invoke-AtomicTest $($test."Technique #") -TestNumbers $($test."Test #") -Cleanup"
+
+        try {
+            Invoke-Expression $command | Tee-Object -FilePath $global:logFilePath -Append
+            Log-Message "Cleanup command executed successfully for TechniqueID=$($test."Technique #") and TestNumber=$($test."Test #")"
+        } catch {
+            Log-Message "Error executing cleanup command for TechniqueID=$($test."Technique #") and TestNumber=$($test."Test #"): $_" "ERROR"
+        }
+    }
+
+    Log-Message "Cleanup completed for all tests"
+}
+
 # Function to create and show the GUI
 function Show-GUI {
     $window = New-Object System.Windows.Window
     $window.Title = "Atomic Campaign Runner"
-    $window.Width = 600  # Reduced width by a third
+    $window.Width = 700  
     $window.Height = 150
     $window.WindowStartupLocation = 'CenterScreen'
     $window.Foreground = 'SeaGreen'
@@ -318,6 +339,27 @@ function Show-GUI {
         }
     })
     $stackPanel.Children.Add($runButton)
+
+    # Add a button to run cleanup
+    $cleanupButton = New-Object System.Windows.Controls.Button
+    $cleanupButton.Content = "Just Cleanup"
+    $cleanupButton.Width = 100
+    $cleanupButton.Height = 30
+    $cleanupButton.Margin = [System.Windows.Thickness]::new(10)
+    $cleanupButton.Background = 'SeaGreen'
+    $cleanupButton.Foreground = 'Black'
+    $cleanupButton.Add_Click({
+        if ($csvTextBox.Text -ne "") {
+            $global:csvPath = $csvTextBox.Text
+            Load-CsvContent -csvPath $global:csvPath
+            Log-Message "Running cleanup"
+            Run-Cleanup
+        } else {
+            Log-Message "No CSV file selected" "ERROR"
+            [System.Windows.MessageBox]::Show("Please select a CSV file before running the cleanup.")
+        }
+    })
+    $stackPanel.Children.Add($cleanupButton)
 
     $window.ShowDialog() | Out-Null
 }
